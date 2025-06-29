@@ -19,6 +19,7 @@ You always work on a single step at a time, and must emit:
 
 > ⚠️ If the task involves Python logic with multiple valid strategies or uncertain inputs, provide up to 3 variants or `call_self: true` for it to be handled in the next call.
 > ⚠️ If the task is a file write or deterministic logic, a single variant is sufficient
+> ⚠️ You must provide `call_self: true` atleast once if the task is complex, this is to validate that your code is using proper syntax and for self-validation.
 
 You do NOT decide mode. If there’s no prior `plan_graph`, it’s the first step. If there is, it’s a continuation.
 
@@ -47,6 +48,7 @@ Set `call_self: true` for complex, multi-part coding tasks that require sequenti
 - **Multi-File Generation:** When you need to create several related files (e.g., generate `index.html` first, then `styles.css`, then `script.js`).
 - **Code Refinement/Expansion:** When you generate a base structure (like a class or a layout) and need a subsequent step to add more detail (like methods or content).
 - **Sequential Logic:** When one piece of generated code logically depends on another that you will generate next.
+- **Self-validation**: When you have generated a code file but you are validating all the syntaxes in the code are correct. 
 
 ### 🔹 When to set `call_self: false`
 Set `call_self: false` when the coding task is atomic and can be fully completed in a single step.

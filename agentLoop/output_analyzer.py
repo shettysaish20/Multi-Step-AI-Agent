@@ -32,34 +32,36 @@ class OutputAnalyzer:
         table.add_column("Step")
         table.add_column("Agent")
         table.add_column("Status")
+        table.add_column("Iterations", justify="center")
         table.add_column("Raw Output Keys")
         
-        for node_id in self.graph.nodes:
+        sorted_nodes = sorted(self.graph.nodes(data=True), key=lambda x: (int(x[0][1:]) if x[0] != 'ROOT' and x[0][1:].isdigit() else float('inf'), x[0]))
+
+        for node_id, node_data in sorted_nodes:
             if node_id == "ROOT":
                 continue
-            node_data = self.graph.nodes[node_id]
-            if node_data.get('output'):
-                output = node_data['output']
-                if isinstance(output, dict):
-                    if 'output' in output and isinstance(output['output'], dict):
-                        keys = list(output['output'].keys())
-                    else:
-                        keys = list(output.keys())
-                else:
-                    keys = ['raw_text']
-                
-                status = node_data['status']
-                if status == 'completed':
-                    status = f"[green]✅ {status}[/green]"
-                elif status == 'failed':
-                    status = f"[red]❌ {status}[/red]"
-                
-                table.add_row(
-                    node_id,
-                    node_data.get('agent', 'Unknown'),
-                    status,
-                    str(keys)
-                )
+            
+            status = node_data.get('status', 'N/A')
+            status_icon = "✅" if status == 'completed' else "❌"
+            status_str = f"{status_icon} {status}"
+
+            # Use the existing helper function to get meaningful keys
+            output_keys = get_meaningful_keys(node_data.get('output', {}))
+            keys_str = ", ".join(output_keys)
+            if len(keys_str) > 80:
+                keys_str = keys_str[:77] + "..."
+
+            # Get iteration count
+            num_iterations = len(node_data.get("iterations", []))
+            iterations_str = str(num_iterations) if num_iterations > 0 else "1"
+
+            table.add_row(
+                node_id,
+                node_data.get('agent', 'Unknown'),
+                status_str,
+                iterations_str,
+                keys_str
+            )
         
         self.console.print(table)
         

@@ -131,7 +131,7 @@ class AgentLoop4:
                 context.mark_running(step_id)
             
             # ✅ EXECUTE AGENTS FOR REAL
-            tasks = [self._execute_step(step_id, context) for step_id in ready_steps]
+            tasks = [self._execute_step(step_id, context, visualizer) for step_id in ready_steps]
             results = await asyncio.gather(*tasks, return_exceptions=True)
 
             # Process results
@@ -152,7 +152,7 @@ class AgentLoop4:
         if context.all_done():
             console.print("🎉 All tasks completed!")
 
-    async def _execute_step(self, step_id, context):
+    async def _execute_step(self, step_id, context, visualizer):
         """Execute a single step with call_self support"""
         step_data = context.get_step_data(step_id)
         agent_type = step_data["agent"]
@@ -237,6 +237,9 @@ class AgentLoop4:
             # Check if we should continue to the next iteration
             if not current_output.get("call_self"):
                 break
+            else:
+                # Log that we are iterating again
+                visualizer.log_iteration(step_id, agent_type, i + 1)
         
         # After the loop, store all iteration data in the node
         if iterations_data:

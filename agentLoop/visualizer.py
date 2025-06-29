@@ -168,6 +168,10 @@ class ExecutionVisualizer:
         self.log_messages.append(f"[{timestamp}] 🔄 Starting {node_id} ({agent}): {desc}")
         self.G.nodes[node_id]["status"] = "running"
         self.G.nodes[node_id]["started"] = datetime.now()
+    
+    def log_iteration(self, node_id, agent, iteration_count):
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        self.log_messages.append(f"[{timestamp}] 🔁 Iterating {node_id} ({agent}), pass {iteration_count}...")
 
     def mark_completed(self, node_id):
         timestamp = datetime.now().strftime("%H:%M:%S")
