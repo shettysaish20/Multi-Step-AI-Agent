@@ -293,19 +293,19 @@ class ExecutionContextManager:
                     
                     if write_key in result_data:
                         globals_schema[write_key] = result_data[write_key]
-                        print(f"✅ Extracted {write_key} = {result_data[write_key]}")
+                        # print(f"✅ Extracted {write_key} = {result_data[write_key]}")
                         extracted = True
                     elif len(result_data) == 1 and len(writes) == 1:
                         key, value = next(iter(result_data.items()))
                         globals_schema[write_key] = value
-                        print(f"✅ Extracted {write_key} = {value} (from {key})")
+                        # print(f"✅ Extracted {write_key} = {value} (from {key})")
                         extracted = True
                 
                 # Strategy 2: Extract from direct agent output (ThinkerAgent, DistillerAgent, FormatterAgent)
                 if not extracted and output and isinstance(output, dict):
                     if write_key in output:
                         globals_schema[write_key] = output[write_key]
-                        print(f"✅ Extracted {write_key} = {output[write_key]} (direct)")
+                        # print(f"✅ Extracted {write_key} = {output[write_key]} (direct)")
                         extracted = True
                 
                 # Strategy 3: Emergency fallback - try to find any matching data

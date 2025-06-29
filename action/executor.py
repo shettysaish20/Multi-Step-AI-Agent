@@ -174,7 +174,7 @@ async def run_user_code(code: str, multi_mcp, session_id: str = "default_session
         sandbox = build_safe_globals(tool_funcs, multi_mcp, session_id)
         local_vars = {}
 
-        log_step(f"[CODE:]: {code}", symbol="🐍")
+        log_step(f"[CODE:]: {code[:1000]}", symbol="🐍")
 
         cleaned_code = fix_unterminated_triple_quotes(textwrap.dedent(code.strip()))
         tree = ast.parse(cleaned_code)
