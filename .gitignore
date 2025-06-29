@@ -72,3 +72,4 @@ yarn-error.log
 __init__.py
 *.js
 *.bin
+!reports/*.pdf
